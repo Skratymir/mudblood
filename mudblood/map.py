@@ -1,7 +1,7 @@
 import json
 import os
 
-from .exceptions import FileTypeError
+from . import map_utils
 
 class Map():
     def __init__(self, map_directory: str):
@@ -9,15 +9,14 @@ class Map():
             raise TypeError("map_directory is not a directory or doesn't exist.")
         self.map_directory = os.path.abspath(map_directory)
 
-    def get_exits(self, position) -> list:
+    def get_room_data(self, position: list) -> dict:
         """
-        Return all the exits available from a given position.
-        Uses the map_directory of the main Map()
+        Returns all data of the room at the specifed position
         """
-        if not os.path.exists(os.path.join(self.map_directory, f"{position}.json")):
+        if not os.path.exists(os.path.join(self.map_directory, f"{map_utils._parse_position}.json")):
             raise FileNotFoundError("The given position does not exist in the map directory")
-        room = json.load(open(os.path.join(self.map_directory, f"{position}.json"), "r"))
-        return room["obvious-exits"]
+        room = json.load(open(os.path.join(self.map_directory, f"{str(position[0])}-{str(position[1])}.json"), "r"))
+        return room
 
     def add_player(self, player_id: str, position: str) -> None:
         """
