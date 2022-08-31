@@ -1,6 +1,9 @@
 {
     "name": "lobby",
     "look": "This is the text shown when the player runs \"look\"",
+    "players": [
+
+    ],
     "objects": [
         {
             "name": "Some object",
@@ -18,7 +21,7 @@
     "obvious-exits": {
         "north": false,
         "south": false,
-        "east": false,
+        "east": true,
         "west": false
     },
     "hidden-exits": {
