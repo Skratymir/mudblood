@@ -4,7 +4,7 @@ import os
 from . import map_utils
 
 class Map():
-    def __init__(self, map_directory: str):
+    def __init__(self, map_directory: str) -> None:
         if not os.path.exists(map_directory) and os.path.isdir(map_directory):
             raise TypeError("map_directory is not a directory or doesn't exist.")
         self.map_directory = os.path.abspath(map_directory)
@@ -13,15 +13,17 @@ class Map():
         """
         Returns all data of the room at the specifed position
         """
-        if not os.path.exists(os.path.join(self.map_directory, f"{map_utils._parse_position}.json")):
+        position = map_utils._parse_position(position)
+        if not os.path.exists(os.path.join(self.map_directory, f"{position}.json")):
             raise FileNotFoundError("The given position does not exist in the map directory")
-        room = json.load(open(os.path.join(self.map_directory, f"{str(position[0])}-{str(position[1])}.json"), "r"))
+        room = json.load(open(os.path.join(self.map_directory, f"{position}.json"), "r"))
         return room
 
-    def add_player(self, player_id: str, position: str) -> None:
+    def add_player(self, player_id: str, position: list) -> None:
         """
         Adds a player to the player register of the specified position
         """
+        position = map_utils._parse_position(position)
         if not os.path.exists(os.path.join(self.map_directory, f"{position}.json")):
             raise FileNotFoundError("The given position does not exist in the map directory")
         room = json.load(open(os.path.join(self.map_directory, f"{position}.json"), "r"))
