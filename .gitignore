@@ -1,5 +1,6 @@
 # Server data
 map/
+players/
 
 # Visual Studio config files
 .vscode
