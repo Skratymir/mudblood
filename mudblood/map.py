@@ -45,7 +45,7 @@ class Map():
         # Add the player to the room data
         room["players"].append(player_id)
         # Save the room data
-        with open(os.path.join(self.map_directory, f"{position}.json"), "w") as f:
+        with open(os.path.join(self.map_directory, f"{map_utils._parse_position(position)}.json"), "w") as f:
             json.dump(room, f)
 
     def remove_player(self, player_id: str) -> None:
@@ -55,9 +55,9 @@ class Map():
             player_data = json.load(f)
             # Get the data of the players room
             room_data = self.get_room_data(player_data["room"])
-            player_room = room_data["room"]
+            player_room = player_data["room"]
             # Remove the player from the room
             room_data["players"][:] = [x for x in room_data["players"] if x != player_id]
             # Save the data
-            with open(os.path.join(self.map_directory, f"{player_room}.json"), "w") as room:
+            with open(os.path.join(self.map_directory, f"{map_utils._parse_position(player_room)}.json"), "w") as room:
                 json.dump(room_data, room)
