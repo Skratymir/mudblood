@@ -1,5 +1,4 @@
-"""
-The map module of the mudblood MUD library.
+"""The map module of the mudblood MUD library.
 
 Contains one main class Map() to create a map instance (you can have multiple maps).
 The Map class contains functions to handle events which influence the map.
@@ -28,9 +27,7 @@ class Map():
         self.player_data_directory = os.path.abspath(player_data_directory)
 
     def get_room_data(self, position: list) -> dict:
-        """
-        Returns all data of the room at the specifed position
-        """
+        """Returns all data of the room at the specifed position"""
         # Converts the list position into a string position
         position = map_utils._parse_position(position)
         # If the room at the position does not exist, throw an error
@@ -41,9 +38,7 @@ class Map():
         return room
 
     def add_player(self, player_id: str, position: list) -> None:
-        """
-        Adds a player to the player register of the specified position
-        """
+        """Adds a player to the player register of the specified position"""
         # Get the room data
         room = self.get_room_data(position)
         # Add the player to the room data
@@ -53,9 +48,7 @@ class Map():
             json.dump(room, f)
 
     def remove_player(self, player_id: str) -> None:
-        """
-        Removes a player from the map
-        """
+        """Removes a player from the map"""
         # Load the player data
         with open(os.path.join(self.player_data_directory, f"{player_id}.json"), "r") as f:
             player_data = json.load(f)
