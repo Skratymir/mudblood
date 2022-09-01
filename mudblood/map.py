@@ -16,7 +16,8 @@ class Map():
     It also requires a player_data_directory to store player data like the name,
     level, equip, etc 
     """
-    def __init__(self, map_directory: str, player_data_directory: str) -> None:
+    def __init__(self, map_directory: str, player_data_directory: str, map_name: str) -> None:
+        self.name = map_name
         # Check if the given map_directory exists and then adds it to the instance vars
         if not os.path.exists(map_directory) and os.path.isdir(map_directory):
             raise TypeError("map_directory is not a directory or doesn't exist.")
