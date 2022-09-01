@@ -10,4 +10,8 @@ def _get_player_data(player_id: str, player_data_directory: str) -> dict:
     # Return player data
     with open(os.path.join(player_data_directory, f"{player_id}.json"), "r") as f:
         return json.load(f)
-    
+
+def save_player_data(player_id: str, player_data_directory: str) -> None:
+    player_data = _get_player_data(player_id, player_data_directory)
+    with open(os.path.join(player_data_directory, f"{player_id}.json"), "w") as f:
+        json.dump(player_data, f)
