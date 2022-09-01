@@ -1,4 +1,4 @@
-from . import player_utils, map, map_utils
+from . import player_utils, map
 
 def look(player_id: str, context: str, player_data_directory: str, maps: list) -> str:
     if context == "":
