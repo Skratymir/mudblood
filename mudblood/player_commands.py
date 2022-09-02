@@ -17,19 +17,19 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
     # Return string if no return was executed prior
     return "This hasn't been implemented yet (sry)"
 
-def do_command(command: tuple, player_data_directory: str, maps: list) -> str:
+def do_command(command: dict, player_data_directory: str, maps: list) -> str:
     """Execute the command the player entered
     Requires the command, the player_data_directory and a list of all
     maps loaded on the server
     """
     # Create dict with all possible commands
     commands = {
-        "look": partial(look, command[0], command[2], player_data_directory, maps),
+        "look": partial(look, command["player_id"], command["context"], player_data_directory, maps),
     }
 
     # If the command does not exist, return "cannot do..." message
-    if not command[1] in commands:
+    if not command["command"] in commands:
         return f"You cannot {command} right now"
 
     # Return the output of the command
-    return commands[command[1]]()
+    return commands[command["command"]]()
