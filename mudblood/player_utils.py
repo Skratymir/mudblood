@@ -16,7 +16,7 @@ def _get_player_name(player_id: int, player_data_directory: str) -> str:
         online_players = json.load(f)
     return online_players[str(player_id)]
 
-def _get_online_players(player_data_directory: str) -> dict:
+def get_online_players(player_data_directory: str) -> dict:
     with open(os.path.join(player_data_directory, "online.json"), "r") as f:
         return json.load(f)
 

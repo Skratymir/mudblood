@@ -2,6 +2,8 @@ import os
 import hashlib
 import json
 
+from . import player_utils
+
 def login(login_data: str, player_data_directory: str) -> dict:
     login_data = login_data.split(" ")
     player_name = login_data[0]
@@ -39,8 +41,7 @@ def create_login(player_id: int, login_data: str, player_data_directory: str, ma
 def logout(player_id: str, player_data_directory: str) -> None:
     """Remove player from the list of online players"""
     # Load currently online players
-    with open(os.path.join(player_data_directory, "online.json"), "r") as f:
-        currently_online = json.load(f)
+    currently_online = player_utils.get_online_players()
     
     # Remove player from currently online players
     del currently_online[str(player_id)]
