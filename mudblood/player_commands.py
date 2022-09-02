@@ -3,10 +3,11 @@ from functools import partial
 
 def look(player_id: str, context: str, player_data_directory: str, maps: list) -> str:
     """Return the look data of the specified room/object"""
+    player_name = player_utils._get_player_name(player_id, player_data_directory)
     # If no object is specified return room look data
     if context == "":
         # Get the player data
-        player_data = player_utils._get_player_data(player_id, player_data_directory)
+        player_data = player_utils._get_player_data(player_name, player_data_directory)
         # Find the map the player is currently loaded in
         for map in maps:
             if map.name == player_data["map"]:
@@ -15,7 +16,6 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
                 return room_data["look"]
     # Return string if no return was executed prior
     return "This hasn't been implemented yet (sry)"
-        
 
 def do_command(command: tuple, player_data_directory: str, maps: list) -> str:
     """Execute the command the player entered
