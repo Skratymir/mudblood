@@ -2,6 +2,8 @@ import os
 import json
 import hashlib
 
+from .return_codes import *
+
 def _get_player_data(player_name: str, player_data_directory: str) -> dict:
     """Return playerdata"""
     # If the players data does not exist, raise error
@@ -32,7 +34,7 @@ def login(login_data: str, player_data_directory: str) -> dict:
     player_name = login_data[0]
     if not os.path.exists(os.path.join(player_data_directory, f"{player_name}.json")):
         return {
-            "code": 2,
+            "code": NEW_LOGIN,
             "password": login_data[1]
         }
     else:
@@ -41,11 +43,11 @@ def login(login_data: str, player_data_directory: str) -> dict:
 
         if hashlib.md5(login_data[1].encode()).hexdigest() == player_data["password-hash"]:
             return {
-                "code": 1
+                "code": SUCCESSFULL_LOGIN
             }
         else:
             return {
-                "code": 0
+                "code": LOGIN_ERROR
             }
 
 def create_login(player_id: int, login_data: str, player_data_directory: str, map_name: str) -> dict:
