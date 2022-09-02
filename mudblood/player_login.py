@@ -18,6 +18,10 @@ def login(login_data: str, player_data_directory: str) -> dict:
             return {
                 "code": 1
             }
+        else:
+            return {
+                "code": 0
+            }
 
 def create_login(player_id: int, login_data: str, player_data_directory: str, map_name: str) -> dict:
     player_name, password = login_data.split(" ")
