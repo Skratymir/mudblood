@@ -33,6 +33,11 @@ def do_command(command: dict, player_data_directory: str, maps: list) -> str:
     Requires the command, the player_data_directory and a list of all
     maps loaded on the server
     """
+    # If the player is not logged in, tell them to log in
+    if not str(command["player_id"]) in player_utils.get_online_players(player_data_directory):
+        print(player_utils.get_online_players(player_data_directory))
+        return "You need to log in!"
+
     # Create dict with all possible commands
     commands = {
         "look": partial(look, command["player_id"], command["context"], player_data_directory, maps),
