@@ -312,6 +312,9 @@ class MudServer(object):
             except socket.error:
                 self._handle_disconnect(id)
 
+            except ConnectionAbortedError:
+                self._handle_disconnect(id)
+
     def _handle_disconnect(self, clid):
 
         # remove the client from the clients map
