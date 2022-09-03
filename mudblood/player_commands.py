@@ -4,19 +4,23 @@ from functools import partial
 def look(player_id: str, context: str, player_data_directory: str, maps: list) -> str:
     """Return the look data of the specified room/object"""
     player_name = player_utils._get_player_name(player_id, player_data_directory)
+
     # If no object is specified return room look data
     if context == "":
         # Get the player data
         player_data = player_utils._get_player_data(player_name, player_data_directory)
+
         # Find the map the player is currently loaded in
         for map in maps:
             if map.name == player_data["map"]:
                 # When the right map is found, return the look data
                 room_data = map_utils.get_room_data(map.map_directory, player_data["room"])
                 look_data = "{}\n".format(room_data["look"])
-                # If there are any exits, show them to the player
+
+                # If there are any visible exits, show them to the player
                 if not len(room_data["obvious-exits"]) == 0:
                     look_data += "You can see the following exits: {}".format(", ".join(room_data["obvious-exits"]))
+                # If there aren't, tell the player
                 else:
                     look_data += """There aren't any obvious exits!
                     You might be able to find one by interacting with the room though, so don't give up!"""
