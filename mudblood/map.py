@@ -29,30 +29,15 @@ class Map():
             raise TypeError("player_data_directory is not a directory or doesn't exist.")
         self.player_data_directory = os.path.abspath(player_data_directory)
 
-    def get_room_data(self, position: list) -> dict:
-        """Returns all data of the room at the specifed position"""
-        # Converts the list position into a string position
-        position = map_utils._parse_position(position)
-
-        # If the room at the position does not exist, throw an error
-        if not os.path.exists(os.path.join(self.map_directory, f"{position}.json")):
-            raise FileNotFoundError("The given position does not exist in the map directory")
-
-        # Return the room data stored in the file of the rooms position
-        room = json.load(open(os.path.join(self.map_directory, f"{position}.json"), "r"))
-        return room
-
     def add_player(self, player_id: str, position: list) -> None:
         """Adds a player to the player register of the specified position"""
         # Get the room data
-        room = self.get_room_data(position)
+        room_data = map_utils.get_room_data(self.map_directory, position)
 
         # Add the player to the room data
-        room["players"].append(player_id)
+        room_data["players"].append(player_id)
 
-        # Save the room data
-        with open(os.path.join(self.map_directory, f"{map_utils._parse_position(position)}.json"), "w") as f:
-            json.dump(room, f)
+        map_utils._save_room_data(self.map_directory, room_data, position)
 
     def remove_player(self, player_id: int) -> None:
         """Removes a player from the map"""
@@ -67,13 +52,11 @@ class Map():
         with open(os.path.join(self.player_data_directory, f"{player_name}.json"), "r") as f:
             player_data = json.load(f)
 
-            # Get the data of the players room
-            room_data = self.get_room_data(player_data["room"])
-            player_room = player_data["room"]
+        # Get the data of the players room
+        room_data = self.get_room_data(player_data["room"])
+        position = player_data["room"]
 
-            # Remove the player from the room
-            room_data["players"][:] = [x for x in room_data["players"] if x != player_id]
+        # Remove the player from the room
+        room_data["players"][:] = [x for x in room_data["players"] if x != player_id]
 
-            # Save the data
-            with open(os.path.join(self.map_directory, f"{map_utils._parse_position(player_room)}.json"), "w") as room:
-                json.dump(room_data, room)
+        map_utils._save_room_data(self.map_directory, room_data, position)

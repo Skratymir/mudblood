@@ -1,4 +1,4 @@
-from . import player_utils, map
+from . import player_utils, map, map_utils
 from functools import partial
 
 def look(player_id: str, context: str, player_data_directory: str, maps: list) -> str:
@@ -12,7 +12,7 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
         for map in maps:
             if map.name == player_data["map"]:
                 # When the right map is found, return the look data
-                room_data = map.get_room_data(player_data["room"])
+                room_data = map_utils.get_room_data(map.map_directory, player_data["room"])
                 return room_data["look"]
     # Return string if no return was executed prior
     return "This hasn't been implemented yet (sry)"
