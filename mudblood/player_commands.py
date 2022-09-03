@@ -17,6 +17,9 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
     if context == "":
         look_data = "{}\n".format(room_data["look"])
 
+        items = room_data["objects"]
+        look_data += "You can see a {}\n".format(", a ".join(items))
+
         # If there are any visible exits, show them to the player
         if not len(room_data["obvious-exits"]) == 0:
             look_data += "You can see the following exits: {}".format(", ".join(room_data["obvious-exits"]))
