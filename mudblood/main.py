@@ -90,6 +90,10 @@ class Server():
                     "context": command[2]
                 }
                 if command["command"] == "login":
+                    if not len(command["context"].split(" ")) == 2:
+                        self.server.send_message(command["player_id"],
+                        "You need to log in with your account name and password!")
+                        continue
                     login = player_utils.login(command["player_id"], command["context"], self.player_data_directory)
                     if login["code"] == return_codes.NEW_LOGIN:
                         if not command["player_id"] in self.new_logins:
