@@ -1,32 +1,45 @@
-from . import player_utils, map, map_utils
+from . import player_utils, map_utils
 from functools import partial
 
 def look(player_id: str, context: str, player_data_directory: str, maps: list) -> str:
     """Return the look data of the specified room/object"""
+    # Get player name and data
     player_name = player_utils._get_player_name(player_id, player_data_directory)
+    player_data = player_utils._get_player_data(player_name, player_data_directory)
+
+    # Find the map the player is currently loaded in
+    for map in maps:
+        if map.name == player_data["map"]:
+            # When the right map is found, return the look data
+            room_data = map_utils.get_room_data(map.map_directory, player_data["room"])
 
     # If no object is specified return room look data
     if context == "":
-        # Get the player data
-        player_data = player_utils._get_player_data(player_name, player_data_directory)
+        look_data = "{}\n".format(room_data["look"])
 
-        # Find the map the player is currently loaded in
-        for map in maps:
-            if map.name == player_data["map"]:
-                # When the right map is found, return the look data
-                room_data = map_utils.get_room_data(map.map_directory, player_data["room"])
-                look_data = "{}\n".format(room_data["look"])
+        # If there are any visible exits, show them to the player
+        if not len(room_data["obvious-exits"]) == 0:
+            look_data += "You can see the following exits: {}".format(", ".join(room_data["obvious-exits"]))
+        # If there aren't, tell the player
+        else:
+            look_data += """There aren't any obvious exits!
+            You might be able to find one by interacting with the room though, so don't give up!"""
+        return look_data
+    
+    # If an object was specified
+    else:
+        # And exists within the room
+        if context in room_data["objects"]:
+            # Return the search data of the object
+            look_data = "You examine the {}:\n".format(context)
+            look_data += "{}".format(room_data["objects"][context]["search"])
+        else:
+            # If the object doesn't exist, return that
+            look_data = "There is no {} here...".format(context)
 
-                # If there are any visible exits, show them to the player
-                if not len(room_data["obvious-exits"]) == 0:
-                    look_data += "You can see the following exits: {}".format(", ".join(room_data["obvious-exits"]))
-                # If there aren't, tell the player
-                else:
-                    look_data += """There aren't any obvious exits!
-                    You might be able to find one by interacting with the room though, so don't give up!"""
-                return look_data
-    # Return string if no return was executed prior
-    return "This hasn't been implemented yet (sry)"
+        # Return the look data
+        return look_data
+        
 
 def do_command(command: dict, player_data_directory: str, maps: list) -> str:
     """Execute the command the player entered
