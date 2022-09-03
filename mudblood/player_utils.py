@@ -20,7 +20,7 @@ def _get_player_name(player_id: int, player_data_directory: str) -> str:
     return online_players[str(player_id)]
 
 def _get_player_map(player_name: str, player_data_directory: str) -> str:
-    player_data = _get_player_data()
+    player_data = _get_player_data(player_name, player_data_directory)
     return player_data["map"]
 
 def get_online_players(player_data_directory: str) -> dict:
@@ -33,7 +33,7 @@ def save_player_data(player_id: int, player_data_directory: str) -> None:
     with open(os.path.join(player_data_directory, f"{player_name}.json"), "w") as f:
         json.dump(player_data, f)
 
-def login(login_data: str, player_data_directory: str) -> dict:
+def login(player_id: int, login_data: str, player_data_directory: str) -> dict:
     login_data = login_data.split(" ")
     player_name = login_data[0]
     if not os.path.exists(os.path.join(player_data_directory, f"{player_name}.json")):
@@ -46,6 +46,7 @@ def login(login_data: str, player_data_directory: str) -> dict:
             player_data = json.load(f)
 
         if hashlib.md5(login_data[1].encode()).hexdigest() == player_data["password-hash"]:
+            _add_login(player_id, player_name, player_data_directory)
             return {
                 "code": SUCCESSFULL_LOGIN
             }
@@ -70,7 +71,7 @@ def create_login(player_id: int, login_data: str, player_data_directory: str, ma
 def logout(player_id: str, player_data_directory: str) -> None:
     """Remove player from the list of online players"""
     # Load currently online players
-    currently_online = get_online_players()
+    currently_online = get_online_players(player_data_directory)
     
     # Remove player from currently online players
     del currently_online[str(player_id)]

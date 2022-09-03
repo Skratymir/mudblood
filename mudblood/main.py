@@ -15,7 +15,6 @@ class Server():
         file_logger=False,
         console_logger=True,
         player_data_directory="./players",
-        map_data_directory="./map",
         login_message="Logged in!"
         ):
         # Set server variables
@@ -39,7 +38,6 @@ class Server():
             root_logger.addHandler(console_handler)
 
         self.player_data_directory = player_data_directory
-        self.map_data_directory = map_data_directory
 
         self.login_message = login_message
 
@@ -47,9 +45,9 @@ class Server():
 
         self.server = server.MudServer()
     
-    def add_map(self, map_name: str) -> None:
+    def add_map(self, map_name: str, map_data_directory: str) -> None:
         """Add a map to the server"""
-        self.maps.append(map.Map(self.map_data_directory, self.player_data_directory, map_name))
+        self.maps.append(map.Map(map_data_directory, self.player_data_directory, map_name))
 
     def update(self) -> None:
         """If the time that has passed since the last update
@@ -59,17 +57,18 @@ class Server():
             self.last_tick = time.time()
 
             # Connect new players
-            for player_id in server.get_new_players():
+            for player_id in self.server.get_new_players():
                 self.server.send_message(player_id, "Connected!")
                 logging.info(f"Player with id {player_id} has connected to the server")
 
             # Remove disconnected players
-            for player_id in server.get_disconnected_players():
+            for player_id in self.server.get_disconnected_players():
                 # If the player wasn't currently creating an account
                 # remove player from map
                 if not player_id in self.new_logins:
                     player_map = player_utils._get_player_map(
-                    player_utils._get_player_name(player_id, self.map_data_directory)
+                        player_utils._get_player_name(player_id, self.player_data_directory),
+                        self.player_data_directory
                     )
                     for map_name in self.maps:
                         if map_name.name == player_map:
@@ -91,7 +90,7 @@ class Server():
                     "context": command[2]
                 }
                 if command["command"] == "login":
-                    login = player_utils.login(command["context"], self.player_data_directory)
+                    login = player_utils.login(command["player_id"], command["context"], self.player_data_directory)
                     if login["code"] == return_codes.NEW_LOGIN:
                         if not command["player_id"] in self.new_logins:
                             self.server.send_message(command["player_id"], "Please repeat your login to confirm")
@@ -119,12 +118,14 @@ class Server():
 
                 else:
                     command_output = player_commands.do_command(command, self.player_data_directory, self.maps)
-                    server.send_command(command["player_id"], command_output)
+                    self.server.send_message(command["player_id"], command_output)
                     logging.info(
                         "Player with id {} has executed command {} {}".format(
                             command["player_id"], command["command"], command["context"]
                         )
                     )
+        else:
+            time.sleep(0.1)
 
     def force_update(self) -> None:
         """Update the server even if the time since the last
