@@ -53,7 +53,7 @@ class Map():
             player_data = json.load(f)
 
         # Get the data of the players room
-        room_data = map_utils.get_room_data(self.map_directory, player_data["room"])
+        room_data = self.get_room_data(player_data["room"])
         position = player_data["room"]
 
         # Remove the player from the room

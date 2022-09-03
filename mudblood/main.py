@@ -1,7 +1,6 @@
 import time
 import logging
 import datetime
-import os
 
 from . import *
 
@@ -42,9 +41,6 @@ class Server():
             console_handler = logging.StreamHandler()
             console_handler.setFormatter(log_formatter)
             root_logger.addHandler(console_handler)
-
-        with open(os.path.join(player_data_directory, "online.json"), "w") as f:
-            f.write("{}")
     
     def add_map(self, map_name: str, map_data_directory: str) -> None:
         """Add a map to the server"""
