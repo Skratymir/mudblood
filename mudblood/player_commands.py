@@ -29,7 +29,7 @@ def do_command(command: dict, player_data_directory: str, maps: list) -> str:
 
     # If the command does not exist, return "cannot do..." message
     if not command["command"] in commands:
-        return f"You cannot {command} right now"
+        return "You cannot {} right now".format(command["command"])
 
     # Return the output of the command
     return commands[command["command"]]()
