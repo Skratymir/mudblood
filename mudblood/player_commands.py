@@ -13,7 +13,14 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
             if map.name == player_data["map"]:
                 # When the right map is found, return the look data
                 room_data = map_utils.get_room_data(map.map_directory, player_data["room"])
-                return room_data["look"]
+                look_data = "{}\n".format(room_data["look"])
+                # If there are any exits, show them to the player
+                if not len(room_data["obvious-exits"]) == 0:
+                    look_data += "You can see the following exits: {}".format(", ".join(room_data["obvious-exits"]))
+                else:
+                    look_data += """There aren't any obvious exits!
+                    You might be able to find one by interacting with the room though, so don't give up!"""
+                return look_data
     # Return string if no return was executed prior
     return "This hasn't been implemented yet (sry)"
 
