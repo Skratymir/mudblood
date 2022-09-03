@@ -45,6 +45,8 @@ class Server():
 
         with open(os.path.join(player_data_directory, "online.json"), "w") as f:
             f.write("{}")
+
+        logging.info("Server started")
     
     def add_map(self, map_name: str, map_data_directory: str) -> None:
         """Add a map to the server"""
