@@ -36,6 +36,7 @@ def do_command(command: dict, player_data_directory: str, maps: list) -> str:
     # Create dict with all possible commands
     commands = {
         "look": partial(look, command["player_id"], command["context"], player_data_directory, maps),
+        "l": partial(look, command["player_id"], command["context"], player_data_directory, maps)
     }
 
     # If the command does not exist, return "cannot do..." message
