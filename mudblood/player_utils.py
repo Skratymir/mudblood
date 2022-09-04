@@ -2,7 +2,7 @@ import os
 import json
 import hashlib
 
-from .return_codes import *
+from .codes import *
 
 def _get_player_data(player_name: str, player_data_directory: str) -> dict:
     """Return playerdata"""
@@ -62,7 +62,7 @@ def login(player_id: int, login_data: str, player_data_directory: str) -> dict:
             # If they entered the correct password, log them in and return a successfull login
             _add_login(player_id, player_name, player_data_directory)
             return {
-                "code": SUCCESSFULL_LOGIN
+                "code": SUCCESSFUL_LOGIN
             }
 
         # If the player has entered a wrong password, return a LOGIN_ERROR
