@@ -8,10 +8,10 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
     player_data = player_utils._get_player_data(player_name, player_data_directory)
 
     # Find the map the player is currently loaded in
-    for map in maps:
-        if map.name == player_data["map"]:
+    for map_item in maps:
+        if map_item.name == player_data["map"]:
             # When the right map is found, return the look data
-            room_data = map_utils.get_room_data(map.map_directory, player_data["room"])
+            room_data = map_utils.get_room_data(map_item.map_directory, player_data["room"])
 
     # If no object is specified return room look data
     if context == "":
@@ -19,6 +19,13 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list) -
 
         items = room_data["objects"]
         look_data += "You can see: A {}\n".format(", a ".join(items))
+
+        characters = room_data["characters"]
+        look_data += "You can see the following characters: {}\n".format(", ".join(characters))
+
+        players = room_data["players"]
+        players = list(map(lambda x: player_utils._get_player_name(x, player_data_directory), players))
+        look_data += "You can see the following players: {}\n".format(", ".join(players))
 
         # If there are any visible exits, show them to the player
         if not len(room_data["obvious-exits"]) == 0:
