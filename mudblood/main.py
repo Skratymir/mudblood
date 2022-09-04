@@ -66,7 +66,7 @@ class Server():
 
             # Connect new players
             for player_id in self.server.get_new_players():
-                self.player_states["login"][player_id] = codes.NOT_LOGGED_IN
+                self.player_states[player_id]["login"] = codes.NOT_LOGGED_IN
                 self.server.send_message(player_id, "Connected!")
                 logging.info(f"Player with id {player_id} has connected to the server")
 
@@ -74,7 +74,7 @@ class Server():
             for player_id in self.server.get_disconnected_players():
                 # If the player wasn't currently creating an account
                 # remove player from map
-                if self.player_states["login"][player_id] == codes.LOGGED_IN:
+                if self.player_states[player_id]["login"] == codes.LOGGED_IN:
                     if self.map_type == "map":
                         player_map = player_utils._get_player_map(
                             player_utils._get_player_name(player_id, self.player_data_directory),
@@ -87,8 +87,8 @@ class Server():
                     player_utils.save_player_data(player_id, self.player_data_directory)
                     player_utils.logout(player_id, self.player_data_directory)
 
-                # Otherwise remove player from new logins to save memory
-                del self.player_states["login"][player_id]
+                # Remove player from new logins to save memory
+                del self.player_states[player_id]
 
                 logging.info(f"Player with id {player_id} has disconnected from the server")
 
@@ -116,12 +116,12 @@ class Server():
                     if login["code"] == codes.NEW_LOGIN:
                         # Add the player to a list of players who need to confirm their
                         # login name and password
-                        if not self.player_states["login"][command["player_id"]] == codes.NOT_LOGGED_IN:
+                        if not self.player_states[command["player_id"]]["login"] == codes.NOT_LOGGED_IN:
                             self.server.send_message(command["player_id"], "Please repeat your login to confirm")
-                            self.player_states["login"][command["player_id"]] = login["password"]
+                            self.player_states[command["player_id"]]["login"] = login["password"]
                         # If they already are in that list and they confirmed the password, create their account
                         else:
-                            if login["password"] == self.player_states["login"][command["player_id"]]:
+                            if login["password"] == self.player_states[command["player_id"]]["login"]:
                                 player_utils.create_login(
                                     command["player_id"], 
                                     command["context"], 
@@ -131,7 +131,7 @@ class Server():
                                 if self.map_type == "map":
                                     # Add the player to the default map and tell them they logged in
                                     self.maps[0].add_player(command["player_id"], [0, 0])
-                                    self.player_states["login"][command["player_id"]] = codes.LOGGED_IN
+                                    self.player_states[command["player_id"]]["login"] = codes.LOGGED_IN
                                     self.server.send_message(command["player_id"], self.login_message)
                             else:
                                 # If the player entered a wrong password, tell them so
@@ -140,6 +140,9 @@ class Server():
                     elif login["code"] == codes.SUCCESSFUL_LOGIN:
                         # If player logged in successfully, add them to the map and tell them they logged in
                         self.maps[0].add_player(command["player_id"], [0, 0])
+                        self.player_states[command["player_id"]]["login"] = codes.LOGGED_IN
+                        self.player_states[command["player_id"]]["game"] = codes.IDLE
+
                         self.server.send_message(command["player_id"], self.login_message)
 
                     elif login["code"] == codes.LOGIN_ERROR:
