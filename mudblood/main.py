@@ -43,6 +43,7 @@ class Server():
             console_handler.setFormatter(log_formatter)
             root_logger.addHandler(console_handler)
 
+        # Clear list of online players
         with open(os.path.join(player_data_directory, "online.json"), "w") as f:
             f.write("{}")
 
