@@ -132,12 +132,11 @@ class Server():
                                 if self.map_type == "map":
                                     # Add the player to the default map and tell them they logged in
                                     self.maps[0].add_player(command["player_id"], [0, 0])
+                                    self.player_states[command["player_id"]] = codes.LOGGED_IN
                                     self.server.send_message(command["player_id"], self.login_message)
                             else:
                                 # If the player entered a wrong password, tell them so
                                 self.server.send_message(command["player_id"], "Passwords do not match!")
-                            # Either way delete the player from the list
-                            del self.new_logins[command["player_id"]]
 
                     elif login["code"] == codes.SUCCESSFUL_LOGIN:
                         # If player logged in successfully, add them to the map and tell them they logged in
