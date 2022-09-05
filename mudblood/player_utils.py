@@ -25,6 +25,10 @@ def _get_player_map(player_name: str, player_data_directory: str) -> str:
     player_data = _get_player_data(player_name, player_data_directory)
     return player_data["map"]
 
+def _get_player_area(player_name: str, player_data_directory: str) -> str:
+    player_data = _get_player_data(player_name, player_data_directory)
+    return player_data["area"]
+
 def get_online_players(player_data_directory: str) -> dict:
     """Return the dict of online players and their IDs"""
     with open(os.path.join(player_data_directory, "online.json"), "r") as f:
