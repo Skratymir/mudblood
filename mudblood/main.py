@@ -178,7 +178,7 @@ class Server():
                 else:
                     # If the player doesn't want to log in, execute their command
                     if self.map_type == "map":
-                        command_output = player_commands.do_command(player_id, command, context, self.player_data_directory, self.maps)
+                        command_output = player_commands.do_command(player_id, command, context, self.player_data_directory, self.map_type, self.maps)
                         self.server.send_message(player_id, command_output)
                     elif self.map_type == "area":
                         command_output = player_commands.do_command(

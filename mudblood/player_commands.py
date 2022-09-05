@@ -49,9 +49,6 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             else:
                 # If the object doesn't exist, return that
                 look_data = "There is no {} here...".format(context)
-
-        # Return the look data
-        return look_data
     
     elif map_type == "area":
         # Get the player name and data
@@ -77,7 +74,7 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             players = list(map(lambda x: player_utils._get_player_name(x, player_data_directory), players))
             look_data += "You can see the following players: {}\n".format(", ".join(players))
 
-        return look_data
+    return look_data
         
 
 def do_command(player_id: int, command: str, context: str, player_data_directory: str, map_type: str, maps=[], map_data_directory="") -> str:
