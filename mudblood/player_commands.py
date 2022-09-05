@@ -29,7 +29,8 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             # Add players to look data
             players = room_data["players"]
             players = list(map(lambda x: player_utils._get_player_name(x, player_data_directory), players))
-            look_data += "You can see the following players: {}\n".format(", ".join(players))
+            if len(players) > 0:
+                look_data += "You can see the following players: {}\n".format(", ".join(players))
 
             # If there are any visible exits, show them to the player
             if not len(room_data["obvious-exits"]) == 0:
@@ -72,7 +73,8 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             # Add players to look data
             players = room_data["players"]
             players = list(map(lambda x: player_utils._get_player_name(x, player_data_directory), players))
-            look_data += "You can see the following players: {}\n".format(", ".join(players))
+            if len(players) > 0:
+                look_data += "You can see the following players: {}\n".format(", ".join(players))
 
     return look_data
         
