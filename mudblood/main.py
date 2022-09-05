@@ -164,7 +164,6 @@ class Server():
                             self.player_states[player_id]["login"] = codes.LOGGED_IN
                             self.player_states[player_id]["game"] = codes.IDLE
                         elif self.map_type == "area":
-                            print(player_utils.get_online_players(self.player_data_directory))
                             player_name = player_utils.get_online_players(self.player_data_directory)[str(player_id)]
                             player_data = player_utils._get_player_data(player_name, self.player_data_directory)
                             area_utils.add_player(player_id, self.map_data_directory, player_data["area"], player_data["room"])
@@ -189,7 +188,6 @@ class Server():
                             map_type=self.map_type,
                             map_data_directory=self.map_data_directory
                         )
-                        print(command_output)
                         self.server.send_message(player_id, command_output)
                     logging.info(
                         "Player with id {} has executed command {} {}".format(
