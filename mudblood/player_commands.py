@@ -84,6 +84,17 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
                 look_data += """There aren't any obvious exits!
                 You might be able to find one by interacting with the room though, so don't give up!"""
 
+        # If an object was specified
+        else:
+            # And exists within the room
+            if context in room_data["objects"]:
+                # Return the search data of the object
+                look_data = "You examine the {}:\n".format(context)
+                look_data += "{}".format(room_data["objects"][context]["search"])
+            else:
+                # If the object doesn't exist, return that
+                look_data = "There is no {} here...".format(context)
+
     return look_data
         
 
