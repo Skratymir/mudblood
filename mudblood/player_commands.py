@@ -76,6 +76,14 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             if len(players) > 0:
                 look_data += "You can see the following players: {}\n".format(", ".join(players))
 
+            # If there are any visible exits, show them to the player
+            if not len(room_data["obvious-exits"]) == 0:
+                look_data += "You can see the following exits: {}".format(", ".join(room_data["obvious-exits"]))
+            # If there aren't, tell the player
+            else:
+                look_data += """There aren't any obvious exits!
+                You might be able to find one by interacting with the room though, so don't give up!"""
+
     return look_data
         
 
