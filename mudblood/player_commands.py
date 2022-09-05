@@ -29,6 +29,7 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             # Add players to look data
             players = room_data["players"]
             players = list(map(lambda x: player_utils._get_player_name(x, player_data_directory), players))
+            players.remove(player_name)
             if len(players) > 0:
                 look_data += "You can see the following players: {}\n".format(", ".join(players))
 
@@ -73,6 +74,7 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
             # Add players to look data
             players = room_data["players"]
             players = list(map(lambda x: player_utils._get_player_name(x, player_data_directory), players))
+            players.remove(player_name)
             if len(players) > 0:
                 look_data += "You can see the following players: {}\n".format(", ".join(players))
 
@@ -105,7 +107,6 @@ def do_command(player_id: int, command: str, context: str, player_data_directory
     """
     # If the player is not logged in, tell them to log in
     if not str(player_id) in player_utils.get_online_players(player_data_directory):
-        print(player_utils.get_online_players(player_data_directory))
         return "You need to log in!"
 
     # Create dict with all possible commands
