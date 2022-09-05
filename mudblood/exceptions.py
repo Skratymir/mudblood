@@ -1,0 +1,2 @@
+class MapTypeException(Exception):
+    pass
