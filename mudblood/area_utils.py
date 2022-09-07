@@ -1,7 +1,7 @@
 import os
 import json
 
-from . import player_utils
+from . import player_utils, exceptions
 
 def remove_player(player_id: int, player_data_directory: str, map_data_directory) -> None:
     """Removes a player from the map"""
@@ -61,3 +61,21 @@ def  get_area_data(map_data_directory: str, area: str) -> dict:
     # Return the room data stored in the file of the rooms position
     area = json.load(open(os.path.join(map_data_directory, f"{area}.json"), "r"))
     return area
+
+
+def move_player(player_id: int, player_data_directory: str, map_data_directory: str, exit: str) -> None:
+    """Move a player to the specified room and area"""
+    # Load required data
+    player_data = player_utils._get_player_data(
+        player_utils._get_player_name(player_id, player_data_directory),
+        player_data_directory
+    )
+    room_data = get_room_data(map_data_directory, player_data["area"], player_data["room"])
+    
+    # Throw error if exit doesn't exist
+    if not exit in room_data["obvious-exits"]:
+        raise exceptions.RoomNotFoundException(f"Exit leads to non-existent room")
+
+    # Move player
+    remove_player(player_id, player_data_directory, map_data_directory)
+    add_player(player_id, map_data_directory, room_data["obvious-exits"][exit]["area"], room_data["obvious-exits"][exit]["room"])
