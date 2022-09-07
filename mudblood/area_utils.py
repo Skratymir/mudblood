@@ -38,7 +38,7 @@ def _save_room_data(map_directory: str, area: str, room: str, room_data: dict) -
         area_data = json.load(f)
     area_data["rooms"][room] = room_data
     with open(os.path.join(map_directory, f"{area}.json"), "w") as f:
-        json.dump(area_data, f)
+        json.dump(area_data, f, indent=4)
 
 def get_room_data(map_directory: str, area: str, room: str) -> dict:
     """Return the data of a given room in a given area"""

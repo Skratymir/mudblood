@@ -24,4 +24,4 @@ def _save_room_data(map_directory: str, room_data: dict, position: list) -> None
     map directory, room position and room data"""
     # Save the data
     with open(os.path.join(map_directory, f"{_parse_position(position)}.json"), "w") as f:
-        json.dump(room_data, f)
+        json.dump(room_data, f, indent=4)

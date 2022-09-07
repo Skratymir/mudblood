@@ -41,7 +41,7 @@ def save_player_data(player_id: int, player_data_directory: str) -> None:
     player_data = _get_player_data(player_name, player_data_directory)
     # Save the data
     with open(os.path.join(player_data_directory, f"{player_name}.json"), "w") as f:
-        json.dump(player_data, f)
+        json.dump(player_data, f, indent=4)
 
 def login(player_id: int, login_data: str, player_data_directory: str) -> dict:
     """Handle a login attempt"""
@@ -91,7 +91,7 @@ def create_login(player_id: int, login_data: str, player_data_directory: str, ma
     }
     # Save the player data
     with open(os.path.join(player_data_directory, f"{player_name}.json"), "w") as f:
-        json.dump(player_data, f)
+        json.dump(player_data, f, indent=4)
 
     # Add the player to the logged in players
     _add_login(player_id, player_name, player_data_directory)
@@ -106,7 +106,7 @@ def logout(player_id: str, player_data_directory: str) -> None:
 
     # Save currently online players
     with open(os.path.join(player_data_directory, "online.json"), "w") as f:
-        json.dump(currently_online, f)
+        json.dump(currently_online, f, indent=4)
 
 def _add_login(player_id: int, player_name: str, player_data_directory: str) -> None:
     """Add a player to the list of online players"""
@@ -121,4 +121,4 @@ def _add_login(player_id: int, player_name: str, player_data_directory: str) -> 
 
     # Save currently online players
     with open(os.path.join(player_data_directory, "online.json"), "w") as f:
-        json.dump(currently_online, f)
+        json.dump(currently_online, f, indent=4)
