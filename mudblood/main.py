@@ -107,7 +107,6 @@ class Server():
                             if area == player_area:
                                 area_utils.remove_player(player_id, self.player_data_directory, self.map_data_directory)
 
-                    player_utils.save_player_data(player_id, self.player_data_directory)
                     player_utils.logout(player_id, self.player_data_directory)
 
                 # Remove player from new logins to save memory

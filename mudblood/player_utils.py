@@ -34,11 +34,8 @@ def get_online_players(player_data_directory: str) -> dict:
     with open(os.path.join(player_data_directory, "online.json"), "r") as f:
         return json.load(f)
 
-def save_player_data(player_id: int, player_data_directory: str) -> None:
+def save_player_data(player_name: str, player_data_directory: str, player_data: dict) -> None:
     """Save the data of a player"""
-    # Load the player name and data
-    player_name = _get_player_name(player_id, player_data_directory)
-    player_data = _get_player_data(player_name, player_data_directory)
     # Save the data
     with open(os.path.join(player_data_directory, f"{player_name}.json"), "w") as f:
         json.dump(player_data, f, indent=4)

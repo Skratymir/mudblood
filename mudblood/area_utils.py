@@ -71,10 +71,20 @@ def move_player(player_id: int, player_data_directory: str, map_data_directory: 
         player_data_directory
     )
     room_data = get_room_data(map_data_directory, player_data["area"], player_data["room"])
-    
+
     # Throw error if exit doesn't exist
     if not exit in room_data["obvious-exits"]:
         raise exceptions.RoomNotFoundException(f"Exit leads to non-existent room")
+
+    # Save updated player data
+    player_data["area"] = room_data["obvious-exits"][exit]["area"]
+    player_data["room"] = room_data["obvious-exits"][exit]["room"]
+
+    player_utils.save_player_data(
+        player_utils._get_player_name(player_id, player_data_directory),
+        player_data_directory,
+        player_data
+    )
 
     # Move player
     remove_player(player_id, player_data_directory, map_data_directory)

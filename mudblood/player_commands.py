@@ -98,6 +98,19 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
                 look_data = "There is no {} here...".format(context)
 
     return look_data
+
+
+def move_area(player_id: int, player_data_directory: str, map_data_directory: str, exit: str) -> str:
+    area_utils.move_player(player_id, player_data_directory, map_data_directory, exit)
+    player_data = player_utils._get_player_data(
+        player_utils._get_player_name(player_id, player_data_directory),
+        player_data_directory
+    )
+    return area_utils.get_room_data(map_data_directory, player_data["area"], player_data["room"])["look"]
+
+
+def move_map():
+    pass
         
 
 def do_command(player_id: int, command: str, context: str, player_data_directory: str, map_type: str, maps=[], map_data_directory="") -> str:
@@ -114,6 +127,17 @@ def do_command(player_id: int, command: str, context: str, player_data_directory
         "look": partial(look, player_id, context, player_data_directory, maps, map_type, map_data_directory),
         "l": partial(look, player_id, context, player_data_directory, maps, map_type, map_data_directory)
     }
+
+    player_data = player_utils._get_player_data(
+        player_utils._get_player_name(player_id, player_data_directory), player_data_directory
+    )
+
+    if command in area_utils.get_room_data(
+        map_data_directory,
+        player_data["area"],
+        player_data["room"]
+    )["obvious-exits"] and map_type == "area":
+        return move_area(player_id, player_data_directory, map_data_directory, command)
 
     # If the command does not exist, return "cannot do..." message
     if not command in commands:
