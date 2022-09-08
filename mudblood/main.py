@@ -109,7 +109,7 @@ class Server():
 
                     player_utils.logout(player_id, self.player_data_directory)
 
-                # Remove player from new logins to save memory
+                # Remove player from player states to save memory
                 del self.player_states[player_id]
 
                 logging.info(f"Player with id {player_id} has disconnected from the server")

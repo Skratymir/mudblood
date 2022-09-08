@@ -67,6 +67,7 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
         if context == "":
             look_data = "{}\n".format(room_data["look"])
 
+            # Add objects to look data
             items = room_data["objects"]
             if len(items) > 0:
                 look_data += "You can see: A {}\n".format(", a ".join(items))
@@ -106,11 +107,14 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
 
 
 def move_area(player_id: int, player_data_directory: str, map_data_directory: str, exit: str) -> str:
+    """Move the player from one room to another using the area map model"""
     area_utils.move_player(player_id, player_data_directory, map_data_directory, exit)
     player_data = player_utils._get_player_data(
         player_utils._get_player_name(player_id, player_data_directory),
         player_data_directory
     )
+
+    # Return the look data of the new room to tell the player that they moved
     return area_utils.get_room_data(map_data_directory, player_data["area"], player_data["room"])["look"]
 
 
@@ -133,18 +137,23 @@ def do_command(player_id: int, command: str, context: str, player_data_directory
         "l": partial(look, player_id, context, player_data_directory, maps, map_type, map_data_directory)
     }
 
+    # Load player data
     player_data = player_utils._get_player_data(
         player_utils._get_player_name(player_id, player_data_directory), player_data_directory
     )
     if map_type == "area":
+        # Get room data
         room_data = area_utils.get_room_data(
             map_data_directory,
             player_data["area"],
             player_data["room"]
         )
+
+        # Auto exit alias search
         exit_matches = [key for key in room_data["obvious-exits"] if key.startswith(command)]
         if exit_matches:
             if len(exit_matches) > 1:
+                # If more than one exits were found, return message
                 return "You have to be more specific!"
             return move_area(player_id, player_data_directory, map_data_directory, exit_matches[0])
 
