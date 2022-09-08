@@ -133,13 +133,17 @@ def do_command(player_id: int, command: str, context: str, player_data_directory
     player_data = player_utils._get_player_data(
         player_utils._get_player_name(player_id, player_data_directory), player_data_directory
     )
-
-    if command in area_utils.get_room_data(
-        map_data_directory,
-        player_data["area"],
-        player_data["room"]
-    )["obvious-exits"] and map_type == "area":
-        return move_area(player_id, player_data_directory, map_data_directory, command)
+    if map_type == "area":
+        room_data = area_utils.get_room_data(
+            map_data_directory,
+            player_data["area"],
+            player_data["room"]
+        )
+        exit_matches = [key for key in room_data["obvious-exits"] if key.startswith(command)]
+        if exit_matches:
+            if len(exit_matches) > 1:
+                return "You have to be more specific!"
+            return move_area(player_id, player_data_directory, map_data_directory, exit_matches[0])
 
     # If the command does not exist, return "cannot do..." message
     if not command in commands:
