@@ -24,7 +24,8 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
 
             # Add NPCs to look data
             characters = room_data["characters"]
-            look_data += "You can see the following characters: {}\n".format(", ".join(characters))
+            if len(characters) > 0:
+                look_data += "You can see the following characters: {}\n".format(", ".join(characters))
 
             # Add players to look data
             players = room_data["players"]
@@ -69,7 +70,8 @@ def look(player_id: str, context: str, player_data_directory: str, maps: list, m
 
             # Add NPCs to look data
             characters = room_data["characters"]
-            look_data += "You can see the following characters: {}\n".format(", ".join(characters))
+            if len(characters) > 0:
+                look_data += "You can see the following characters: {}\n".format(", ".join(characters))
 
             # Add players to look data
             players = room_data["players"]
