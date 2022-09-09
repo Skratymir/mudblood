@@ -1,7 +1,15 @@
 from . import player_utils,  area_utils
 from functools import partial
 
-def look(player_id: str, context: str, player_data_directory: str, map_data_direcory: str) -> str:
+def quit(player_id: int, player_data_directory: str, main):
+    """Disconnects the player from the server"""
+    player_utils.logout(player_id, player_data_directory)
+    del main.player_states[player_id]
+    main.server._handle_disconnect(player_id)
+    return ""
+
+
+def look(player_id: str, context: str, player_data_directory: str, map_data_directory: str) -> str:
     """Return the look data of the specified room/object"""
     # Get the player name and data
     player_name = player_utils._get_player_name(player_id, player_data_directory)
@@ -10,7 +18,7 @@ def look(player_id: str, context: str, player_data_directory: str, map_data_dire
     # Get the players room data
     area = player_data["area"]
     room = player_data["room"]
-    room_data = area_utils.get_room_data(map_data_direcory, area, room)
+    room_data = area_utils.get_room_data(map_data_directory, area, room)
 
     if context == "":
         look_data = "{}\n".format(room_data["look"])
@@ -70,28 +78,29 @@ def move_map():
     pass
         
 
-def do_command(player_id: int, command: str, context: str, player_data_directory: str, map_data_directory: str) -> str:
+def do_command(player_id: int, command: str, context: str, main) -> str:
     """Execute the command the player entered
     Requires the command, the player_data_directory and a list of all
     maps loaded on the server
     """
     # If the player is not logged in, tell them to log in
-    if not str(player_id) in player_utils.get_online_players(player_data_directory):
+    if not str(player_id) in player_utils.get_online_players(main.player_data_directory):
         return "You need to log in!"
 
     # Create dict with all possible commands
     commands = {
-        "look": partial(look, player_id, context, player_data_directory, map_data_directory),
-        "l": partial(look, player_id, context, player_data_directory, map_data_directory)
+        "look": partial(look, player_id, context, main.player_data_directory, main.map_data_directory),
+        "l": partial(look, player_id, context, main.player_data_directory, main.map_data_directory),
+        "quit": partial(quit, player_id, main.player_data_directory, main)
     }
 
     # Load player data
     player_data = player_utils._get_player_data(
-        player_utils._get_player_name(player_id, player_data_directory), player_data_directory
+        player_utils._get_player_name(player_id, main.player_data_directory), main.player_data_directory
     )
     # Get room data
     room_data = area_utils.get_room_data(
-        map_data_directory,
+        main.map_data_directory,
         player_data["area"],
         player_data["room"]
     )
@@ -102,7 +111,7 @@ def do_command(player_id: int, command: str, context: str, player_data_directory
         if len(exit_matches) > 1:
             # If more than one exits were found, return message
             return "You have to be more specific!"
-        return move_area(player_id, player_data_directory, map_data_directory, exit_matches[0])
+        return move_area(player_id, main.player_data_directory, main.map_data_directory, exit_matches[0])
 
     # If the command does not exist, return "cannot do..." message
     if not command in commands:

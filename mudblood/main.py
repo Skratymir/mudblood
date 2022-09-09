@@ -114,8 +114,7 @@ class Server():
                         player_id=player_id,
                         command=command,
                         context=context,
-                        player_data_directory=self.player_data_directory,
-                        map_data_directory=self.map_data_directory
+                        main=self
                     )
                     self.server.send_message(player_id, command_output)
                 logging.info(
