@@ -88,7 +88,7 @@ class Server():
                             self.player_data_directory
                         )
 
-                        areas = [f for f in os.listdir(self.map_data_directory) if os.path.isfile(os.path.join(self.map_data_directory, f))]
+                        areas = [f.removesuffix(".json") for f in os.listdir(self.map_data_directory) if os.path.isfile(os.path.join(self.map_data_directory, f))]
                         for area in areas:
                             if area == player_area:
                                 area_utils.remove_player(player_id, self.player_data_directory, self.map_data_directory)
