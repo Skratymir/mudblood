@@ -22,11 +22,6 @@ def _get_player_name(player_id: int, player_data_directory: str) -> str:
         online_players = json.load(f)
     return online_players[str(player_id)]
 
-def _get_player_map(player_name: str, player_data_directory: str) -> str:
-    """Return the map the player is currently on"""
-    player_data = _get_player_data(player_name, player_data_directory)
-    return player_data["map"]
-
 def _get_player_area(player_name: str, player_data_directory: str) -> str:
     player_data = _get_player_data(player_name, player_data_directory)
     return player_data["area"]
