@@ -81,21 +81,22 @@ class Server():
             for player_id in self.server.get_disconnected_players():
                 # If the player wasn't currently creating an account
                 # remove player from map
-                if self.player_states[player_id]["login"] == codes.LOGGED_IN:
-                    player_area = player_utils._get_player_area(
-                        player_utils._get_player_name(player_id, self.player_data_directory),
-                        self.player_data_directory
-                    )
+                if player_id in self.player_states:
+                    if self.player_states[player_id]["login"] == codes.LOGGED_IN:
+                        player_area = player_utils._get_player_area(
+                            player_utils._get_player_name(player_id, self.player_data_directory),
+                            self.player_data_directory
+                        )
 
-                    areas = [f for f in os.listdir(self.map_data_directory) if os.path.isfile(os.path.join(self.map_data_directory, f))]
-                    for area in areas:
-                        if area == player_area:
-                            area_utils.remove_player(player_id, self.player_data_directory, self.map_data_directory)
+                        areas = [f for f in os.listdir(self.map_data_directory) if os.path.isfile(os.path.join(self.map_data_directory, f))]
+                        for area in areas:
+                            if area == player_area:
+                                area_utils.remove_player(player_id, self.player_data_directory, self.map_data_directory)
 
-                player_utils.logout(player_id, self.player_data_directory)
+                    player_utils.logout(player_id, self.player_data_directory)
 
-                # Remove player from player states to save memory
-                del self.player_states[player_id]
+                    # Remove player from player states to save memory
+                    del self.player_states[player_id]
 
                 logging.info(f"Player with id {player_id} has disconnected from the server")
 

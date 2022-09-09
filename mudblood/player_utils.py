@@ -167,6 +167,7 @@ def handle_login(player_id: int, player_data_directory: str, map_data_directory:
         else:
             main.server.send_message(player_id, "Thy spell is incorrect! You shall not enter!")
             del main.player_states[player_id]
+            main.server._handle_disconnect(player_id)
 
     elif login_code["code"] == SUCCESSFUL_LOGIN:
         player_data = _get_player_data(_get_player_name(player_id, player_data_directory), player_data_directory)
@@ -178,3 +179,4 @@ def handle_login(player_id: int, player_data_directory: str, map_data_directory:
     elif login_code["code"] == LOGIN_ERROR:
         main.server.send_message(player_id, "Thy spell is incorrect! You shall not enter!")
         del main.player_states[player_id]
+        main.server._handle_disconnect(player_id)
