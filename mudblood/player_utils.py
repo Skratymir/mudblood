@@ -119,59 +119,82 @@ def _add_login(player_id: int, player_name: str, player_data_directory: str) -> 
 
 
 def handle_login(player_id: int, player_data_directory: str, map_data_directory: str, spawn_area: str, spawn_room: str, main) -> None:
+    """The player login thread. Handles the player login and account creation"""
+    # Ask the player for their username
     main.server.send_message(player_id, "What is thy name, adventurer?")
+
+    # Wait until the player entered something (server.update() coming from main Thread)
     commands = main.server.get_commands()
     while not any(player_id in l for l in commands):
         time.sleep(0.5)
         commands = main.server.get_commands()
 
+    # Get the players input and set the name to it
     for command in commands:
         if command[0] == player_id:
             name = command[1]
 
+    # Ask the player for their password
     main.server.send_message(player_id, "What is thy unlock spell, {}?".format(name))
 
+    # Wait until the player entered something (server.update() coming from main Thread)
     commands = []    
     while not any(player_id in l for l in commands):
         time.sleep(0.5)
         commands = main.server.get_commands()
 
+    # Get the players input and set their password to it
     for command in commands:
         if command[0] == player_id:
             password = command[1]
 
+    # Get the login code using those credentials
     login_code = login(player_id, [name, password], player_data_directory)
 
+    # If the player is creating a new account
     if login_code["code"] == NEW_LOGIN:
+        # Ask the player to confirm their password
         main.server.send_message(player_id, "Please confirm thy unlock spell, {}.".format(name))
+        # Wait for the player to enter something
         commands = []    
         while not any(player_id in l for l in commands):
             time.sleep(0.5)
             commands = main.server.get_commands()
 
+        # Get the players input and set the password to it
         for command in commands:
             if command[0] == player_id:
                 password = command[1]
 
+        # If the player entered the same password twice
         if login_code["password"] == password:
+            # Create their login, add them to the spawn room, set their player state, send them a message
             create_login(player_id, [name, password], player_data_directory, spawn_area, spawn_room)
             area_utils.add_player(player_id, map_data_directory, spawn_area, spawn_room)
             main.player_states[player_id]["login"] = LOGGED_IN
             main.player_states[player_id]["game"] = IDLE
             main.server.send_message(player_id, "You are now entering another realm, adventurer. Take care on your journey!")
+        # If the player entered two different passwords
         else:
-            main.server.send_message(player_id, "Thy spell is incorrect! You shall not enter!")
+            # Tell the player their password doesn't match
+            main.server.send_message(player_id, "Thy spell does not match! You shall not enter!")
+            # Remove the player from the server
             del main.player_states[player_id]
             main.server._handle_disconnect(player_id)
 
+    # If the player entered the correct credentials
     elif login_code["code"] == SUCCESSFUL_LOGIN:
+        # Add the player to their current room, set their player state, send them a message
         player_data = _get_player_data(_get_player_name(player_id, player_data_directory), player_data_directory)
         area_utils.add_player(player_id, map_data_directory, player_data["area"], player_data["room"])
         main.player_states[player_id]["login"] = LOGGED_IN
         main.player_states[player_id]["game"] = IDLE
         main.server.send_message(player_id, "You are now entering another realm, adventurer. Take care on your journey!")
 
+    # If the player entered a wrong password
     elif login_code["code"] == LOGIN_ERROR:
+        # Tell them they entered the wrong password
         main.server.send_message(player_id, "Thy spell is incorrect! You shall not enter!")
+        # Remove the player from the server
         del main.player_states[player_id]
         main.server._handle_disconnect(player_id)

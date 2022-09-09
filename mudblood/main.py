@@ -65,8 +65,11 @@ class Server():
             # Connect new players
             for player_id in self.server.get_new_players():
 
+                # Set player state up for login
                 self.player_states[player_id] = {}
                 self.player_states[player_id]["login"] = codes.NOT_LOGGED_IN
+
+                # Handle player login
                 Thread(target=player_utils.handle_login, args=([
                     player_id,
                     self.player_data_directory,
@@ -88,6 +91,7 @@ class Server():
                             self.player_data_directory
                         )
 
+                        # Remove the player from the map
                         areas = [f.removesuffix(".json") for f in os.listdir(self.map_data_directory) if os.path.isfile(os.path.join(self.map_data_directory, f))]
                         for area in areas:
                             if area == player_area:
