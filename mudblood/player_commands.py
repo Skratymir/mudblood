@@ -72,10 +72,6 @@ def move_area(player_id: int, player_data_directory: str, map_data_directory: st
 
     # Return the look data of the new room to tell the player that they moved
     return look(player_id, "", player_data_directory, map_data_directory)
-
-
-def move_map():
-    pass
         
 
 def do_command(player_id: int, command: str, context: str, main) -> str:
