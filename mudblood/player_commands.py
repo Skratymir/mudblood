@@ -90,6 +90,9 @@ def do_command(player_id: int, command: str, context: str, main) -> str:
         "quit": partial(quit, player_id, main.player_data_directory, main)
     }
 
+    # Change the command to lowercase for better matching
+    command = command.lower()
+
     # Load player data
     player_data = player_utils._get_player_data(
         player_utils._get_player_name(player_id, main.player_data_directory), main.player_data_directory
