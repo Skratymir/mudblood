@@ -106,7 +106,6 @@ class Server():
                 player_id, command, context = command
 
                 if self.player_states[player_id]["login"] == codes.NOT_LOGGED_IN:
-                    self.server.send_message(player_id, "You need to log in!")
                     continue
 
                 else:
