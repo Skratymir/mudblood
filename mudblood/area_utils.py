@@ -68,11 +68,13 @@ def  get_area_data(map_data_directory: str, area: str) -> dict:
 
 
 def get_area_map(map_data_directory: str, area: str) -> list:
+    """Return list of a pretty map of the specified area"""
+    # Load rooms and their positions
     rooms = get_area_data(map_data_directory, area)["rooms"]
     room_positions = [_parse_coordinates(rooms[room]["position"], rooms) for room in rooms]
 
+    # Create empty map
     Map = []
-    num = 0
     for x in range(len(rooms) * 2 + 1):
         Map.append([])
         for y in range(len(rooms) * 2 + 1):
@@ -81,11 +83,12 @@ def get_area_map(map_data_directory: str, area: str) -> list:
                 continue
             Map[x].append("   ")
 
-
+    # Redefine rooms to continue creating map
     rooms = [[_parse_coordinates(rooms[room]["position"], rooms), rooms[room]["obvious-exits"]] for room in rooms]
 
-
+    # For every room
     for room in rooms:
+        # If there is a sideway exit, remove the pre/suffix and exchange it for a - to indicate a connection
         if "east" in room[1]:
             if Map[room[0][1]][room[0][0]].endswith(" "):
                 Map[room[0][1]][room[0][0]] = Map[room[0][1]][room[0][0]].removesuffix(" ") + "-"
@@ -98,45 +101,60 @@ def get_area_map(map_data_directory: str, area: str) -> list:
             if Map[room[0][1]][room[0][0] - 1].endswith(" "):
                 Map[room[0][1]][room[0][0] - 1] = Map[room[0][1]][room[0][0] - 1].removesuffix(" ") + "-"
 
-
+    # Insert new empty lines in the map to make room for north/south exits
     for i in range(len(Map)):
         Map.insert(i * 2, ["   "] * len(Map[1]))
     Map = Map[1:]
 
+    # For every room
     for room in rooms:
+        # If there is a vertical exit, add the | to the correct spacing item
         if "north" in room[1]:
             Map[room[0][1] * 2 - 1][room[0][0]] = " | "
         if "south" in room[1]:
             Map[room[0][1] * 2 - 1][room[0][0]] = " | "
 
+    # Create a list of all empty lines
     removables = []
     for line in Map:
         if all(item == "   " for item in line):
             removables.append(line)
 
+    # Remove all empty lines
     for line in removables:
         Map.remove(line)
 
+    # Redefine removables for further map processing
     removables = True
 
+    # For every x value in the map
     for x in range(len(Map[0])):
+        # For every y value in the map
         for i in range(len(Map)):
+            # If the first y item isn't empty, dont remove that y
             if Map[i][0] != "   ":
                 removables = False
+        # If the first y only has empty items, remove the first y, then repeat with the new first y
         if removables:
             for line in Map:
                 line.pop(0)
 
+    # Reset removables
     removables = True
 
+    # For every x value in the map
     for x in range(len(Map[0])):
+        # For every y value in the map
         for i in range(len(Map)):
+            # If the last y item isn't empty, don't remove that y
             if Map[i][-1] != "   ":
                 removables = False
+        # If the last y only has empty items, remove the last y, then repeat with the new last y
         if removables:
             for line in Map:
                 line.pop(-1)
 
+    # Return the fully processed map
     return Map
 
 

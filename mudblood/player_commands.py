@@ -63,13 +63,20 @@ def look(player_id: str, context: str, player_data_directory: str, map_data_dire
 
 
 def show_map(player_id: int, map_data_directory: str, player_data_directory: str, server):
+    """Show the player the map of the area they are currently in"""
+    # Get the players area
     area = player_utils._get_player_area(
         player_utils._get_player_name(player_id, player_data_directory),
         player_data_directory
     )
+    # Send an empty string to create a spacing
     server.send_message(player_id, "")
+
+    # For every line of the map
     for line in area_utils.get_area_map(map_data_directory, area):
+        # Send the player all the values of the line joined together
         server.send_message(player_id, "".join(line))
+    # Return empty string for spacing and to not throw an error
     return ""
 
 
