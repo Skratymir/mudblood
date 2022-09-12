@@ -69,11 +69,15 @@ def show_map(player_id: int, map_data_directory: str, player_data_directory: str
         player_utils._get_player_name(player_id, player_data_directory),
         player_data_directory
     )
+    player_position = player_utils._get_player_data(
+        player_utils._get_player_name(player_id, player_data_directory),
+        player_data_directory
+    )["position"]
     # Send an empty string to create a spacing
     server.send_message(player_id, "")
 
     # For every line of the map
-    for line in area_utils.get_area_map(map_data_directory, area):
+    for line in area_utils.get_area_map(map_data_directory, area, player_position):
         # Send the player all the values of the line joined together
         server.send_message(player_id, "".join(line))
     # Return empty string for spacing and to not throw an error

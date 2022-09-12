@@ -67,7 +67,7 @@ def  get_area_data(map_data_directory: str, area: str) -> dict:
     return area
 
 
-def get_area_map(map_data_directory: str, area: str) -> list:
+def get_area_map(map_data_directory: str, area: str, player_position: list) -> list:
     """Return list of a pretty map of the specified area"""
     # Load rooms and their positions
     rooms = get_area_data(map_data_directory, area)["rooms"]
@@ -79,7 +79,10 @@ def get_area_map(map_data_directory: str, area: str) -> list:
         Map.append([])
         for y in range(len(rooms) * 2 + 1):
             if ([y, x] in room_positions):
-                Map[x].append(" * ")
+                if [y, x] == _parse_coordinates(player_position, rooms):
+                    Map[x].append(" # ")
+                else:
+                    Map[x].append(" * ")
                 continue
             Map[x].append("   ")
 
