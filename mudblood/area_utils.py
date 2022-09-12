@@ -115,7 +115,7 @@ def get_area_map(map_data_directory: str, area: str, player_position: list) -> l
         if "north" in room[1]:
             Map[room[0][1] * 2 - 1][room[0][0]] = " | "
         if "south" in room[1]:
-            Map[room[0][1] * 2 - 1][room[0][0]] = " | "
+            Map[room[0][1] * 2 + 1][room[0][0]] = " | "
 
     # Create a list of all empty lines
     removables = []
