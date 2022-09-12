@@ -69,7 +69,7 @@ def login(player_id: int, login_data: list, player_data_directory: str) -> dict:
                 "code": LOGIN_ERROR
             }
 
-def create_login(player_id: int, login_data: list, player_data_directory: str, area_name: str, room_name: str) -> dict:
+def create_login(player_id: int, login_data: list, map_data_directory: str, player_data_directory: str, area_name: str, room_name: str) -> dict:
     """Create a new account"""
     # Split the players name and password into two vars
     player_name, password = login_data
@@ -77,10 +77,13 @@ def create_login(player_id: int, login_data: list, player_data_directory: str, a
     # Hash the password
     password = hashlib.md5(password.encode())
 
+    position = area_utils.get_room_data(map_data_directory, area_name, room_name)["position"]
+
     # Create the player data
     player_data = {
         "room": room_name,
         "area": area_name,
+        "position": position,
         "password-hash": password.hexdigest()
     }
     # Save the player data
@@ -169,7 +172,7 @@ def handle_login(player_id: int, player_data_directory: str, map_data_directory:
         # If the player entered the same password twice
         if login_code["password"] == password:
             # Create their login, add them to the spawn room, set their player state, send them a message
-            create_login(player_id, [name, password], player_data_directory, spawn_area, spawn_room)
+            create_login(player_id, [name, password], map_data_directory, player_data_directory, spawn_area, spawn_room)
             area_utils.add_player(player_id, map_data_directory, spawn_area, spawn_room)
             main.player_states[player_id]["login"] = LOGGED_IN
             main.player_states[player_id]["game"] = IDLE
