@@ -2,6 +2,7 @@ import time
 import logging
 import datetime
 import os
+import json
 
 from threading import Thread
 from . import *
@@ -52,6 +53,14 @@ class Server():
         # Clear list of online players
         with open(os.path.join(player_data_directory, "online.json"), "w") as f:
             f.write("{}")
+
+        # Clear players from all areas to remove ghosts
+        areas = [area for area in os.listdir(map_data_directory) if area.endswith(".json")]
+        for area in areas:
+            area_data = json.load(open(os.path.join(map_data_directory, area), "r"))
+            for room in area_data["rooms"]:
+                area_data["rooms"][room]["players"] = []
+            json.dump(area_data, open(os.path.join(map_data_directory, area), "w"), indent=4)
 
         logging.info("Server started")
 
