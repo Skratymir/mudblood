@@ -69,6 +69,8 @@ def show_map(player_id: int, map_data_directory: str, player_data_directory: str
         player_utils._get_player_name(player_id, player_data_directory),
         player_data_directory
     )
+
+    # Get the players position
     player_position = player_utils._get_player_data(
         player_utils._get_player_name(player_id, player_data_directory),
         player_data_directory
