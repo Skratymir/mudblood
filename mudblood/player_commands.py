@@ -62,6 +62,30 @@ def look(player_id: str, context: str, player_data_directory: str, map_data_dire
     return look_data
 
 
+def show_map(player_id: int, map_data_directory: str, player_data_directory: str, server):
+    """Show the player the map of the area they are currently in"""
+    # Get the players area
+    area = player_utils._get_player_area(
+        player_utils._get_player_name(player_id, player_data_directory),
+        player_data_directory
+    )
+
+    # Get the players position
+    player_position = player_utils._get_player_data(
+        player_utils._get_player_name(player_id, player_data_directory),
+        player_data_directory
+    )["position"]
+    # Send an empty string to create a spacing
+    server.send_message(player_id, "")
+
+    # For every line of the map
+    for line in area_utils.get_area_map(map_data_directory, area, player_position):
+        # Send the player all the values of the line joined together
+        server.send_message(player_id, "".join(line))
+    # Return empty string for spacing and to not throw an error
+    return ""
+
+
 def move_area(player_id: int, player_data_directory: str, map_data_directory: str, exit: str) -> str:
     """Move the player from one room to another using the area map model"""
     area_utils.move_player(player_id, player_data_directory, map_data_directory, exit)
@@ -83,7 +107,8 @@ def do_command(player_id: int, command: str, context: str, main) -> str:
     commands = {
         "look": partial(look, player_id, context, main.player_data_directory, main.map_data_directory),
         "l": partial(look, player_id, context, main.player_data_directory, main.map_data_directory),
-        "quit": partial(quit, player_id, main.player_data_directory, main)
+        "quit": partial(quit, player_id, main.player_data_directory, main),
+        "map": partial(show_map, player_id, main.map_data_directory, main.player_data_directory, main.server)
     }
 
     # Change the command to lowercase for better matching
