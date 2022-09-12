@@ -177,6 +177,7 @@ def move_player(player_id: int, player_data_directory: str, map_data_directory: 
     # Save updated player data
     player_data["area"] = room_data["obvious-exits"][exit]["area"]
     player_data["room"] = room_data["obvious-exits"][exit]["room"]
+    player_data["position"] = room_data["obvious-exits"][exit]["position"]
 
     # Save the new player data to update their position
     player_utils.save_player_data(
