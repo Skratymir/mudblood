@@ -8,7 +8,7 @@ And you don't have to be good at coding to do it.
 ## No coding required?
 #### Almost.
 The minimal setup looks like this:
-~~~
+~~~python
 import mudblood
 server = mudblood.main.Server()
 while True:
@@ -20,11 +20,11 @@ At least coding wise.
 
 ## Setup Guide
 To tweak your server settings, such as the tick time, you can either reference the server class
-~~~
+~~~python
 server.tick_time = 0.5
 ~~~
 Or set the setting while initiating the server
-~~~
+~~~python
 server = mudblood.main.server(tick_time=0.5)
 ~~~
 
