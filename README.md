@@ -1,12 +1,12 @@
 # mudblood
 ![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Skratymir/mudblood/1?style=for-the-badge)
 
-### What is mudblood
+## What is mudblood
 Mudblood is a simple library to create MUD (Multi User Dungeon) games. It enables creative persons to create their own universe, filled with magic spells, futuristic robots, or whatever you can imagine.
 And you don't have to be good at coding to do it.
 
-### No coding required?
-##### Almost.
+## No coding required?
+#### Almost.
 The minimal setup looks like this:
 ~~~
 import mudblood
@@ -18,7 +18,7 @@ Within just four lines of code, you can create your very own Multi User Dungeon 
 
 At least coding wise.
 
-### Setup Guide
+## Setup Guide
 To tweak your server settings, such as the tick time, you can either reference the server class
 ~~~
 server.tick_time = 0.5
