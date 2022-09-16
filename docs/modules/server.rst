@@ -1,5 +1,6 @@
-This chapter will teach you how to tweak the settings of your server
+Server
 ====================================================================
+This chapter will teach you how to tweak the settings of your server
 
 --------
 Settings

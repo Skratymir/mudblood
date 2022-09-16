@@ -1,9 +1,10 @@
-This chapter will teach you how to write JSON files to create your own map.
+Map
 ===========================================================================
+This chapter will teach you how to write JSON files to create your own map.
 
---------
-The map
---------
+----------
+JSON Files
+----------
 The map consists of many different JSON files, one file for each area.
 The area consists of room, which all have players, objects and other things in them. Here is an example for a very basic area:
 
