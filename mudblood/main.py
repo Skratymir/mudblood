@@ -12,15 +12,15 @@ class Server():
     Create a server module to launch a server.
     """
     def __init__(
-        self, 
+        self,
+        start_room,
         tick_time=0.5,
         log_formatter=logging.Formatter("%(asctime)s [%(levelname)s] - %(message)s"),
         file_logger=False,
         console_logger=True,
         player_data_directory="./players",
-        login_message="Logged in!",
         map_data_directory="./map",
-        start_room={"area": "lobby", "room": "main"}
+        login_message="Logged in!"
         ):
         # Set server variables
         self.player_states = {}
