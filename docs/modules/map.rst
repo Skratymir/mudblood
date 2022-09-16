@@ -14,9 +14,7 @@ The area consists of room, which all have players, objects and other things in t
     "rooms": {
         "main": {
             "look": "You can see a circular plaza. You can see people arrive here seemingly out of nowhere.",
-            "players": [
-                0
-            ],
+            "players": [],
             "objects": {
                 "tree": {
                     "search": "A very fine oak tree."
