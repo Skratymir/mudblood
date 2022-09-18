@@ -1,5 +1,6 @@
 # mudblood
-![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Skratymir/mudblood/1?style=for-the-badge)
+![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Skratymir/mudblood/1?style=for-the-badge) 
+![GitHub milestone](https://img.shields.io/github/milestones/progress-percent/Skratymir/mudblood/2?style=for-the-badge)
 
 ## What is mudblood
 Mudblood is a simple library to create MUD (Multi User Dungeon) games. It enables creative persons to create their own universe, filled with magic spells, futuristic robots, or whatever you can imagine.
